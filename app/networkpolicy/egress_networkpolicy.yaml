@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-to-192-168-233-1521
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: my-app  # 대상 파드의 라벨을 여기에 맞게 수정하세요
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 192.168.233.0/24
+    ports:
+    - protocol: TCP
+      port: 1521

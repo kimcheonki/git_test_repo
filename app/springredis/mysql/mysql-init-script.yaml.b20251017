@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-init-script
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXISTS shoppingmall CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+    GRANT ALL PRIVILEGES ON shoppingmall.* TO 'root'@'%';
+    FLUSH PRIVILEGES;
+
+    USE shoppingmall;
+    CREATE TABLE IF NOT EXISTS users (
+      id BIGINT AUTO_INCREMENT PRIMARY KEY,
+      username VARCHAR(50) NOT NULL,
+      password VARCHAR(100) NOT NULL,
+      email VARCHAR(100),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );

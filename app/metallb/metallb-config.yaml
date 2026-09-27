@@ -1,0 +1,19 @@
+# metallb-config.yaml
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: my-ip-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.233.240-192.168.233.250  # 클러스터 네트워크에 맞게 수정
+
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: my-l2
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - my-ip-pool

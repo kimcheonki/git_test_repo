@@ -1,0 +1,5 @@
+*.jar
+*.tgz
+*.tar.gz
+app/shoppingmall/
+app/harbor/

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spring-app
+  template:
+    metadata:
+      labels:
+        app: spring-app
+    spec:
+      containers:
+        - name: spring
+          image: localhost:5000/springredis:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          command: ["java"]
+          args:
+            - "-Xms2048m"
+            - "-Xmx2048m"
+            - "-Djava.security.egd=file:/dev/./urandom"
+            - "-jar"
+            - "app.jar"
+          envFrom:
+            - configMapRef:
+                name: spring-config
+            - secretRef:
+                name: spring-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-app
+spec:
+  selector:
+    app: spring-app
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 8443  # Spring Boot가 HTTPS를 처리하는 포트
+  type: LoadBalancer
