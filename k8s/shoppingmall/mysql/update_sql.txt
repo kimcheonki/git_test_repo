@@ -1,0 +1,2 @@
+kubectl cp ./product.sql [POD_NAME]:/tmp/product.sql
+mysql -u root -p < /tmp/product.sql

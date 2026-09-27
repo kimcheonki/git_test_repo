@@ -1,0 +1,9 @@
+# HPA 설정
+- CPU 사용률 기준으로 파드 수를 자동 조절하도록 설정합니다.
+1) kubectl autoscale deployment shoppingmall --cpu-percent=50 --min=1 --max=5
+
+# 부하 생성
+- kubectl run을 이용해 부하를 유발하는 컨테이너를 실행합니다.
+2) kubectl run -i --tty load-generator --image=busybox /bin/sh
+- 컨테이너 내부에서 다음 명령어로 부하를 생성:
+3) while true; do wget -q -O- http://shoppingmall.com/; done
