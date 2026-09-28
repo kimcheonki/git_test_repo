@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: spring
-          image: localhost:5000/springredis:latest
+          #image: localhost:5000/springredis:latest
+          image: ghcr.io/kimcheonki/springredis:1.0 
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
