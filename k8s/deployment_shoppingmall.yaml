@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: shoppingmall
-          image: localhost:5000/shoppingmall:latest
+          #image: localhost:5000/shoppingmall:latest
+          image: ghcr.io/kimcheonki/shoppingmall:1.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
