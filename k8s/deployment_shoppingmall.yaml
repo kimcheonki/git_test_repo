@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shoppingmall
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shoppingmall
+  template:
+    metadata:
+      labels:
+        app: shoppingmall
+    spec:
+      containers:
+        - name: shoppingmall
+          image: localhost:5000/shoppingmall:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            # ✅ MySQL 설정
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://mysql:3306/shoppingmall?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: password
+
+            # ✅ Redis 설정 추가
+            - name: SPRING_DATA_REDIS_HOST
+              value: redis-svc
+            - name: SPRING_DATA_REDIS_PORT
+              value: "6379"
+
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
